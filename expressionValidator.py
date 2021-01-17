@@ -2,7 +2,6 @@ class expressionValidator:
     def __init__(self, original_exp):
         self.original_exp = original_exp
         self.exp = self.original_exp
-        self.array = []
         self.open_brackets = 0
         self.close_brackets = 0
         self.i = 0
@@ -60,15 +59,19 @@ class expressionValidator:
         return output
     def checkCondition(self,exp, index):
         return exp[index + 1] in self.condition[exp[index]]
+
+    def checkIntegerCondition(self,exp,index):
+        return exp[index + 1] in self.condition["int"]
     
-    def appendtoArray(self, value):
-        self.array.append(value)
     
     def checkOperators(self,value):
         return value in ["-","+","*","/",")","("]
 
     def checkAllValid(self,value):
         return self.checkInteger(value) or self.decimalStop(value) or self.checkOperators(value)
+    
+    def checkParenthesis(self,exp):
+        return (exp[0] == "(" and exp[-1] == ")")
 
     def recursionExponential(self,array):
         for i in range(len(array)):
@@ -112,37 +115,33 @@ class expressionValidator:
         else:
             output = ["("]
         while self.i < len(self.exp):
-            # if index == "(":
-            #     self.i += 1
-            #     output.append(self.recursiveFunction())
-            # if index == ")":
-            #     self.i += 1
-            #     output.append(")")
-            #     return output
-            print(output)
-            print(self.i)
             index = self.exp[self.i]
             if index != " ":
                 if self.checkAllValid(index):
-                    # If it is an integer
-                    if self.checkInteger(index):
-                        # Check if next character is a decimal point or integer
-                        if self.checkInteger(self.exp[self.i+1]) or self.decimalStop(self.exp[self.i+1]):
-                            output.append(self.getIntegerOrDecimalValue(self.exp,self.i,str(self.exp[self.i])))
-                        # else it is just one character
-                        else:
-                            output.append(index)
                     # If it is not an integer
-                    else:
                         # print(self.exp[self.i + 1] in self.condition[self.i])
-                        try:
-                            # if self.exp[self.i + 1] in self.condition[self.i]:\
+                    try:
+                        # if self.exp[self.i + 1] in self.condition[self.i]:\
+                        if self.checkInteger(index):
+                            if self.checkIntegerCondition(self.exp, self.i):
+                                if self.checkInteger(self.exp[self.i+1]) or self.decimalStop(self.exp[self.i+1]):
+                                    output.append(self.getIntegerOrDecimalValue(self.exp,self.i,str(self.exp[self.i])))
+                                # else it is just one character
+                                else:
+                                    output.append(index)
+                            else:
+                                print("Invalid Input after integer")
+                                return None
+                        else:
                             if self.checkCondition(self.exp,self.i):
-                                # print(index)
-                                # print("someth")
                                 if index == "(":
                                     self.i += 1
-                                    output.append(self.recursiveFunction())
+                                    callback = self.recursiveFunction()
+                                    if callback == None:
+                                        return None
+                                    else:
+                                        output.append(callback)
+                                    # output.append(self.recursiveFunction())
                                 elif index == ")":
                                     # self.i += 1
                                     output.append(")")
@@ -173,7 +172,7 @@ class expressionValidator:
                                             self.i +=1
                                         else:
                                             print("Invalid input after exponential")
-                                            break
+                                            return None
                                     else:
                                         output.append(index)
                                 elif index == ".":
@@ -191,38 +190,47 @@ class expressionValidator:
 
                             # If not valid character error
                             else:
-                                # print(index)
-                                # print(i)
                                 print("Invalid Input after character")
                                 # print("Error at Character: " + str(exp[i:i+2]))
-                                break
-                        # Last index
-                        except:
-                            if index == ")":
-                                self.close_brackets += 1
-                                # output.append(index)
-                                    # self.i += 1
-                                output.append(")")
-                                return output
-                            else:
-                                try:
-                                    int(index)
-                                    output.append(index)
-                                except:
-                                    print("Incorrect input")
-                                    break
+                                return None
+                    # Last index
+                    except:
+                        if index == ")":
+                            self.close_brackets += 1
+                            # output.append(index)
+                                # self.i += 1
+                            output.append(")")
+                            return output
+                        else:
+                            try:
+                                int(index)
+                                output.append(index)
+                            except:
+                                print("Incorrect input")
+                                return None
                 else:
                     print("Invalid Character used")
-                    break
+                    return None
             self.i += 1
+        if self.open_brackets != self.close_brackets:
+            print("Number of brackets does not match")
+            return None
         return output
     def runEntirePrograme(self):
-        return self.flatten(self.recursionMul(self.recursionExponential(self.recursiveFunction())))
+        if self.checkParenthesis(self.exp):
+            output = self.recursiveFunction()
+            if output == None:
+                return None
+            else:
+                return self.flatten(self.recursionMul(self.recursionExponential(output)))
+        else:
+            print("Not enclosed with parenthesis")
+            return None
 
 
     
 # expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**-2.5))")
-expClass = expressionValidator("(3+3)")
+expClass = expressionValidator("(3-(3**4))")
 print(expClass.runEntirePrograme())
 
 

@@ -75,7 +75,7 @@ class mainPrograme:
         expression = input("Please enter the expression you want to evaluate:\n")
         expClass = expressionValidator(expression)
         output = expClass.runEntirePrograme()
-        if output == []:
+        if output == None:
             print("Invalid Expression")
             self.validateExpression()
         else:
