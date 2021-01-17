@@ -1,4 +1,7 @@
 import os
+from expressionValidator import expressionValidator
+from stack import Stack
+from binaryTree import BinaryTree
 # choice = int(input("Please select your choice ('1','2','3'):\n1. Evaluate expressions\n2. Sort expression\n3. Exit\nEnter choice: "))
 # class.runfunction(choice-1)
 def mergeSort(l):
@@ -68,13 +71,29 @@ def recursive(array,length,output_file_edit):
 class mainPrograme:
     def __init__(self,choice=None):
         self.choice = choice
-
+    def validateExpression(self):
+        expression = input("Please enter the expression you want to evaluate:\n")
+        expClass = expressionValidator(expression)
+        output = expClass.runEntirePrograme()
+        if output == []:
+            print("Invalid Expression")
+            self.validateExpression()
+        else:
+            return output
     def evaluateExpression(self):
-        print("evaluateExpression")
+        exp = self.validateExpression()
+        # print("sds")
+        # print(exp)
+        # expression = input("Please enter the expression you want to evaluate:\n")
+        # expClass = expressionValidator("(((1+2)/3)*5)")
+        # if expClass.runEntirePrograme() == None:
+        #     print("Invalid output file")
+        # print("evaluateExpression")
+        # expression 
         # exp = expression
-        # tree = buildParseTree(exp)
-        # tree.printPreorder(0)
-        # print (f'The expression: {exp} evaluates to: {evaluate(tree)}')
+        tree = buildParseTree(exp)
+        tree.printPreorder(0)
+        print (f'The expression: {exp} evaluates to: {evaluate(tree)}')
 
     
     def sortExpression(self,input_file,output_file):
@@ -159,6 +178,66 @@ class mainPrograme:
         
         print(output)
 
+def buildParseTree(exp):
+    tokens = exp
+#     exp = exp.replace(" ","")
+#     number_or_symbol = re.compile('(-?\d+\.\d+|\w+|[()\-+*/^])')
+#     number_or_symbol = re.compile('([-+]?\d+\.\d+|[-]?[0-9]+|[**]+|[()\-+*/^])')
+#     tokens = re.findall(number_or_symbol, exp)
+    stack = Stack()
+    tree = BinaryTree('?')
+    stack.push(tree)
+    currentTree = tree
+    for t in tokens:
+        # RULE 1: If token is '(' add a new node as left child
+        # and descend into that node
+        if t == '(':
+            currentTree.insertLeft('?')
+            stack.push(currentTree)
+            currentTree = currentTree.getLeftTree() 
+        # RULE 2: If token is operator set key of current node
+        # to that operator and add a new node as right child
+        # and descend into that node
+        elif t in ['+', '-', '*', '/', '**']:
+            if currentTree.getKey() == '?':
+                currentTree.setKey(t)
+                currentTree.insertRight("?")
+                stack.push(currentTree)
+                currentTree = currentTree.getRightTree()
+            else:
+                currentTree.insertRight(t)
+                stack.push(currentTree)
+                currentTree = currentTree.getRightTree()
+                currentTree = currentTree.getRightTree()
+        # RULE 3: If token is number, set key of the current node
+        # to that number and return to parent
+        elif t not in ['+', '-', '*', '/', '**', ')'] :
+            currentTree.setKey(float(t))
+            parent = stack.pop()
+            currentTree = parent
+        # RULE 4: If token is ')' go to parent of current node
+        elif t == ')':
+            currentTree = stack.pop()
+        else:
+            raise ValueError
+    return tree
+def evaluate(tree):
+    leftTree = tree.getLeftTree()
+    rightTree = tree.getRightTree()
+    op = tree.getKey()
+    if leftTree != None and rightTree != None:
+        if op == '+':
+            return evaluate(leftTree) + evaluate(rightTree)
+        elif op == '-':
+            return evaluate(leftTree) - evaluate(rightTree)
+        elif op == '*':
+            return evaluate(leftTree) * evaluate(rightTree)
+        elif op == '/':
+            return evaluate(leftTree) / evaluate(rightTree)
+        elif op == '**':
+            return evaluate(leftTree) ** evaluate(rightTree)
+    else:
+        return tree.getKey()
 # main = mainPrograme()
 # main.printIntroduction()
 # chosen_choice = main.getChoice()
