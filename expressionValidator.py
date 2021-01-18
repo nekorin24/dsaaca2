@@ -136,6 +136,7 @@ class expressionValidator:
                             if self.checkCondition(self.exp,self.i):
                                 if index == "(":
                                     self.i += 1
+                                    self.open_brackets += 1
                                     callback = self.recursiveFunction()
                                     if callback == None:
                                         return None
@@ -144,6 +145,7 @@ class expressionValidator:
                                     # output.append(self.recursiveFunction())
                                 elif index == ")":
                                     # self.i += 1
+                                    self.close_brackets += 1
                                     output.append(")")
                                     return output
                                 elif index == "+":
@@ -178,12 +180,12 @@ class expressionValidator:
                                 elif index == ".":
                                     output.append(self.getIntegerOrDecimalValue(self.exp,self.i,"0."))
                                 
-                                elif index == "(":
-                                    self.open_brackets += 1
-                                    # output.append(index)
-                                # If equals to close bracket increment
-                                elif index == ")":
-                                    self.close_brackets += 1
+                                # elif index == "(":
+                                #     self.open_brackets += 1
+                                #     # output.append(index)
+                                # # If equals to close bracket increment
+                                # elif index == ")":
+                                #     self.close_brackets += 1
                                     # output.append(index)
                                 else:
                                     output.append(index)
@@ -212,6 +214,8 @@ class expressionValidator:
                     print("Invalid Character used")
                     return None
             self.i += 1
+        print(self.open_brackets)
+        print(self.close_brackets)
         if self.open_brackets != self.close_brackets:
             print("Number of brackets does not match")
             return None
@@ -230,8 +234,10 @@ class expressionValidator:
 
     
 # expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**-2.5))")
-expClass = expressionValidator("(3-(3**4))")
-print(expClass.runEntirePrograme())
+output = input("Expression: ")
+expClass = expressionValidator(output)
+print(expClass.recursiveFunction())
+# print(expClass.runEntirePrograme())
 
 
 
