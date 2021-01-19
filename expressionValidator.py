@@ -98,7 +98,18 @@ class expressionValidator:
                     newarray = array[:(i-1)] + newarray + array[(i+2):]
                     return self.recursionMul(newarray)
         return array
-
+    def recursionAdd(self,array):
+        for i in range(len(array)):
+            if isinstance(array[i],list):
+                array[i] = self.recursionAdd(array[i])
+            if array[i] in ["+","-"]:
+                if array[i+2] == ")" and array[i-2] == "(":
+                    pass
+                else:
+                    newarray = [["("] + array[(i-1):(i+2)] + [")"]]
+                    newarray = array[:(i-1)] + newarray + array[(i+2):]
+                    return self.recursionAdd(newarray)
+        return array
 
     def flatten(self,S):
         if S == []:
@@ -120,6 +131,7 @@ class expressionValidator:
                 if self.checkAllValid(index):
                     # If it is not an integer
                         # print(self.exp[self.i + 1] in self.condition[self.i])
+                    # print(index)
                     try:
                         # if self.exp[self.i + 1] in self.condition[self.i]:\
                         if self.checkInteger(index):
@@ -157,14 +169,26 @@ class expressionValidator:
                                     # If another negative in front of negative
                                     if self.exp[self.i+1] == "-":
                                         # Switch to + sign at next character
-                                        self.exp = self.exp[:(self.i+1)] + "+" + self.exp[(self.i+2):]
+                                        if self.exp[self.i-1] in ["(","*","/"]:
+                                            self.exp = self.exp[:(self.i)] + self.exp[(self.i+2):]
+                                            self.i -= 1
+                                            if not self.checkCondition(self.exp,self.i):
+                                                print("Invalid")
+                                                return None
+                                            print(self.exp[self.i])
+                                        else:
+                                            self.exp = self.exp[:(self.i+1)] + "+" + self.exp[(self.i+2):]
                                     # If it is a plus sign in front of negative sign
                                     elif self.exp[self.i+1] == "+":
                                         # Switch to - sign at next character
                                         self.exp = self.exp[:(self.i+1)] + "-" + self.exp[(self.i+2):]
                                     # If its an integer after negative
-                                    elif (self.checkInteger(self.exp[self.i+1]) or self.decimalStop(self.exp[self.i+1])) and (self.exp[self.i-1] in ["(","*","/"]):
-                                        output.append(self.getIntegerOrDecimalValue(self.exp,self.i,"-"))
+                                    # elif (self.checkInteger(self.exp[self.i+1]) or self.decimalStop(self.exp[self.i+1])) and (self.exp[self.i-1] in ["(","*","/"]):
+                                    elif (self.exp[self.i-1] in ["(","*","/"]):
+                                        if self.checkInteger(self.exp[self.i+1]):
+                                            output.append(self.getIntegerOrDecimalValue(self.exp,self.i,"-"))
+                                        elif self.decimalStop(self.exp[self.i+1]):
+                                            output.append(self.getIntegerOrDecimalValue(self.exp,self.i,"-0"))
                                     else:
                                         output.append(index)
                                 elif index == "*":
@@ -226,7 +250,7 @@ class expressionValidator:
             if output == None:
                 return None
             else:
-                return self.flatten(self.recursionMul(self.recursionExponential(output)))
+                return self.flatten(self.recursionAdd(self.recursionMul(self.recursionExponential(output))))
         else:
             print("Not enclosed with parenthesis")
             return None
@@ -234,9 +258,9 @@ class expressionValidator:
 
     
 # expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**-2.5))")
-output = input("Expression: ")
-expClass = expressionValidator(output)
-print(expClass.recursiveFunction())
+# output = input("Expression: ")
+# expClass = expressionValidator(output)
+# print(expClass.recursiveFunction())
 # print(expClass.runEntirePrograme())
 
 

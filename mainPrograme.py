@@ -77,20 +77,11 @@ class mainPrograme:
         output = expClass.runEntirePrograme()
         if output == None:
             print("Invalid Expression")
-            self.validateExpression()
+            return self.validateExpression()
         else:
             return output
     def evaluateExpression(self):
         exp = self.validateExpression()
-        # print("sds")
-        # print(exp)
-        # expression = input("Please enter the expression you want to evaluate:\n")
-        # expClass = expressionValidator("(((1+2)/3)*5)")
-        # if expClass.runEntirePrograme() == None:
-        #     print("Invalid output file")
-        # print("evaluateExpression")
-        # expression 
-        # exp = expression
         tree = buildParseTree(exp)
         tree.printPreorder(0)
         print (f'The expression: {exp} evaluates to: {evaluate(tree)}')
@@ -184,6 +175,7 @@ def buildParseTree(exp):
 #     number_or_symbol = re.compile('(-?\d+\.\d+|\w+|[()\-+*/^])')
 #     number_or_symbol = re.compile('([-+]?\d+\.\d+|[-]?[0-9]+|[**]+|[()\-+*/^])')
 #     tokens = re.findall(number_or_symbol, exp)
+    print(tokens)
     stack = Stack()
     tree = BinaryTree('?')
     stack.push(tree)
@@ -199,16 +191,10 @@ def buildParseTree(exp):
         # to that operator and add a new node as right child
         # and descend into that node
         elif t in ['+', '-', '*', '/', '**']:
-            if currentTree.getKey() == '?':
-                currentTree.setKey(t)
-                currentTree.insertRight("?")
-                stack.push(currentTree)
-                currentTree = currentTree.getRightTree()
-            else:
-                currentTree.insertRight(t)
-                stack.push(currentTree)
-                currentTree = currentTree.getRightTree()
-                currentTree = currentTree.getRightTree()
+            currentTree.setKey(t)
+            currentTree.insertRight('?')
+            stack.push(currentTree)
+            currentTree = currentTree.getRightTree()
         # RULE 3: If token is number, set key of the current node
         # to that number and return to parent
         elif t not in ['+', '-', '*', '/', '**', ')'] :
