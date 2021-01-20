@@ -14,7 +14,19 @@ def mergeSort(l):
         leftIndex,rightIndex,mergeIndex = 0,0,0
         mergeList = l
         while leftIndex < len(leftHalf) and rightIndex < len(rightHalf):
-            if eval(leftHalf[leftIndex]) == eval(rightHalf[rightIndex]):
+            # lefttree = buildParseTree(leftHalf[leftIndex])
+            # righttree = buildParseTree(rightHalf[rightIndex])
+            expClassLeft = expressionValidator(leftHalf[leftIndex])
+            expClassRight = expressionValidator(rightHalf[rightIndex])
+            outputLeft = expClassLeft.runEntirePrograme()
+            outputRight = expClassRight.runEntirePrograme()
+            if outputLeft == None or outputRight == None:
+                print("Invalid Expression")
+                return
+            # print(eval(rightTree))
+            lefttree = buildParseTree(outputLeft)
+            righttree = buildParseTree(outputRight)
+            if evaluate(lefttree) == evaluate(righttree):
                 if len(leftHalf[leftIndex]) < len(rightHalf[rightIndex]):
                     mergeList[mergeIndex] = leftHalf[leftIndex]
                     leftIndex+=1
@@ -22,7 +34,7 @@ def mergeSort(l):
                     mergeList[mergeIndex] = rightHalf[rightIndex]
                     rightIndex+=1
             else:
-                if eval(leftHalf[leftIndex]) < eval(rightHalf[rightIndex]):
+                if evaluate(lefttree) < evaluate(righttree):
                     mergeList[mergeIndex] = leftHalf[leftIndex]
                     leftIndex+=1
                 else:
@@ -45,25 +57,39 @@ def mergeSort(l):
 
 def recursive(array,length,output_file_edit):
     with open(str(output_file_edit),"a") as output_file:
+        # print("*****************************************************************************")
+        expClass = expressionValidator(array[-1])
+        output = expClass.runEntirePrograme()
+        if output == None:
+            print("Invalid Expression")
+            return
+        # print(eval(rightTree))
+        # lefttree buildParseTree(outputLeft)
         if len(array)== 1:
             print("\n>>>Evaluation and sorting started:")
-            print("\n*** Expressions with value=> " + str(eval(array[-1])))
-            output_file.write("*** Expressions with value=> " + str(eval(array[-1])))
-            print(str(array[-1]) + "==>" + str(eval(array[-1])))
+            print("\n*** Expressions with value=> " + str(evaluate(buildParseTree(output))))
+            output_file.write("*** Expressions with value=> " + str(evaluate(buildParseTree(output))))
+            print(str(array[-1]) + "==>" + str(evaluate(buildParseTree(output))))
             output_file.write("\n")
-            output_file.write(str(array[-1]) + "==>" + str(eval(array[-1])))
+            output_file.write(str(array[-1]) + "==>" + str(evaluate(buildParseTree(output))))
             return
 
         recursive(array[:-1],length,output_file_edit)
-    
-        if eval(array[-2]) != eval(array[-1]):
-            print("\n*** Expressions with value=> " + str(eval(array[-1])))
+
+        expClass = expressionValidator(array[-2])
+        outputminus = expClass.runEntirePrograme()
+        if output == None:
+            print("Invalid Expression")
+            return
+
+        if evaluate(buildParseTree(outputminus)) != evaluate(buildParseTree(output)):
+            print("\n*** Expressions with value=> " + str(evaluate(buildParseTree(output))))
             output_file.write("\n")
-            output_file.write("\n*** Expressions with value=> " + str(eval(array[-1])))
+            output_file.write("\n*** Expressions with value=> " + str(evaluate(buildParseTree(output))))
     
-        print(str(array[-1]) + "==>" + str(eval(array[-1])))
+        print(str(array[-1]) + "==>" + str(evaluate(buildParseTree(output))))
         output_file.write("\n")
-        output_file.write(str(array[-1]) + "==>" + str(eval(array[-1])))
+        output_file.write(str(array[-1]) + "==>" + str(evaluate(buildParseTree(output))))
 
         if len(array) == length:
             print("\n>>>Evaluation and sorting completed!\n")
@@ -79,12 +105,12 @@ class mainPrograme:
             print("Invalid Expression")
             return self.validateExpression()
         else:
-            return output
+            return [output,expression]
     def evaluateExpression(self):
         exp = self.validateExpression()
-        tree = buildParseTree(exp)
+        tree = buildParseTree(exp[0])
         tree.printPreorder(0)
-        print (f'The expression: {exp} evaluates to: {evaluate(tree)}')
+        print (f'The expression: {exp[1]} evaluates to: {evaluate(tree)}')
 
     
     def sortExpression(self,input_file,output_file):
@@ -93,17 +119,18 @@ class mainPrograme:
             with open(str(input_file),'r') as input_file:
                 for line in input_file:
                     array.append(line.replace("\n",""))
-            try:
-                mergeSort(array)
                 try:
-                    recursive(array,len(array),str(output_file))
+                    # print(array)
+                    mergeSort(array)
+                    try:
+                        recursive(array,len(array),str(output_file))
+                    except:
+                        print("Invalid output file")
+                        print("Please try again.\n")
+                        self.runSortandEvaluate()
                 except:
-                    print("Invalid output file")
-                    print("Please try again.\n")
-                    self.runSortandEvaluate()
-            except:
-                print("Invalid expression in input file!")
-                return
+                    print("Invalid expression in input file!")
+                    return
         except:
             print("Invalid input file!")
             print("Please try again.\n")
@@ -175,7 +202,7 @@ def buildParseTree(exp):
 #     number_or_symbol = re.compile('(-?\d+\.\d+|\w+|[()\-+*/^])')
 #     number_or_symbol = re.compile('([-+]?\d+\.\d+|[-]?[0-9]+|[**]+|[()\-+*/^])')
 #     tokens = re.findall(number_or_symbol, exp)
-    print(tokens)
+    # print(tokens)
     stack = Stack()
     tree = BinaryTree('?')
     stack.push(tree)

@@ -130,10 +130,7 @@ class expressionValidator:
             if index != " ":
                 if self.checkAllValid(index):
                     # If it is not an integer
-                        # print(self.exp[self.i + 1] in self.condition[self.i])
-                    # print(index)
                     try:
-                        # if self.exp[self.i + 1] in self.condition[self.i]:\
                         if self.checkInteger(index):
                             if self.checkIntegerCondition(self.exp, self.i):
                                 if self.checkInteger(self.exp[self.i+1]) or self.decimalStop(self.exp[self.i+1]):
@@ -203,14 +200,7 @@ class expressionValidator:
                                         output.append(index)
                                 elif index == ".":
                                     output.append(self.getIntegerOrDecimalValue(self.exp,self.i,"0."))
-                                
-                                # elif index == "(":
-                                #     self.open_brackets += 1
-                                #     # output.append(index)
-                                # # If equals to close bracket increment
-                                # elif index == ")":
-                                #     self.close_brackets += 1
-                                    # output.append(index)
+                            
                                 else:
                                     output.append(index)
 
@@ -238,8 +228,6 @@ class expressionValidator:
                     print("Invalid Character used")
                     return None
             self.i += 1
-        print(self.open_brackets)
-        print(self.close_brackets)
         if self.open_brackets != self.close_brackets:
             print("Number of brackets does not match")
             return None
@@ -260,8 +248,8 @@ class expressionValidator:
 # expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**-2.5))")
 # output = input("Expression: ")
 # expClass = expressionValidator(output)
-# print(expClass.recursiveFunction())
-# print(expClass.runEntirePrograme())
+# # print(expClass.recursiveFunction())
+# expClass.runEntirePrograme()
 
 
 
