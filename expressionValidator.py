@@ -73,43 +73,58 @@ class expressionValidator:
     def checkParenthesis(self,exp):
         return (exp[0] == "(" and exp[-1] == ")")
 
-    def recursionExponential(self,array):
-        for i in range(len(array)):
-            if isinstance(array[i],list):
-                array[i] = self.recursionExponential(array[i])
-            if array[i] in ["**"]:
-                if array[i+2] == ")" and array[i-2] == "(":
-                    pass
-                else:
-                    newarray = [["("] + array[(i-1):(i+2)] + [")"]]
-                    newarray = array[:(i-1)] + newarray + array[(i+2):]
-                    return self.recursionExponential(newarray)
-        return array
+    # def recursionExponential(self,array):
+    #     for i in range(len(array)):
+    #         if isinstance(array[i],list):
+    #             array[i] = self.recursionExponential(array[i])
+    #         if array[i] in ["**"]:
+    #             if array[i+2] == ")" and array[i-2] == "(":
+    #                 pass
+    #             else:
+    #                 newarray = [["("] + array[(i-1):(i+2)] + [")"]]
+    #                 newarray = array[:(i-1)] + newarray + array[(i+2):]
+    #                 return self.recursionExponential(newarray)
+    #     return array
 
-    def recursionMul(self,array):
+    # def recursionMul(self,array):
+    #     for i in range(len(array)):
+    #         if isinstance(array[i],list):
+    #             array[i] = self.recursionMul(array[i])
+    #         if array[i] in ["*","/"]:
+    #             if array[i+2] == ")" and array[i-2] == "(":
+    #                 pass
+    #             else:
+    #                 newarray = [["("] + array[(i-1):(i+2)] + [")"]]
+    #                 newarray = array[:(i-1)] + newarray + array[(i+2):]
+    #                 return self.recursionMul(newarray)
+    #     return array
+    # def recursionAdd(self,array):
+    #     for i in range(len(array)):
+    #         if isinstance(array[i],list):
+    #             array[i] = self.recursionAdd(array[i])
+    #         if array[i] in ["+","-"]:
+    #             if array[i+2] == ")" and array[i-2] == "(":
+    #                 pass
+    #             else:
+    #                 newarray = [["("] + array[(i-1):(i+2)] + [")"]]
+    #                 newarray = array[:(i-1)] + newarray + array[(i+2):]
+    #                 return self.recursionAdd(newarray)
+    #     return array
+
+    def recursionFunction(self,array,condition):
+        if len(condition) == 0:
+            return array
         for i in range(len(array)):
             if isinstance(array[i],list):
-                array[i] = self.recursionMul(array[i])
-            if array[i] in ["*","/"]:
+                array[i] = self.recursionFunction(array[i],condition)
+            if array[i] in condition[0]:
                 if array[i+2] == ")" and array[i-2] == "(":
                     pass
                 else:
                     newarray = [["("] + array[(i-1):(i+2)] + [")"]]
                     newarray = array[:(i-1)] + newarray + array[(i+2):]
-                    return self.recursionMul(newarray)
-        return array
-    def recursionAdd(self,array):
-        for i in range(len(array)):
-            if isinstance(array[i],list):
-                array[i] = self.recursionAdd(array[i])
-            if array[i] in ["+","-"]:
-                if array[i+2] == ")" and array[i-2] == "(":
-                    pass
-                else:
-                    newarray = [["("] + array[(i-1):(i+2)] + [")"]]
-                    newarray = array[:(i-1)] + newarray + array[(i+2):]
-                    return self.recursionAdd(newarray)
-        return array
+                    return self.recursionFunction(newarray,condition)
+        return self.recursionFunction(array,condition[1:])
 
     def flatten(self,S):
         if S == []:
@@ -238,7 +253,8 @@ class expressionValidator:
             if output == None:
                 return None
             else:
-                return self.flatten(self.recursionAdd(self.recursionMul(self.recursionExponential(output))))
+                # return self.flatten(self.recursionAdd(self.recursionMul(self.recursionExponential(output))))
+                return self.flatten(self.recursionFunction(output,[["**"],["*","/"],["+","-"]]))
         else:
             print("Not enclosed with parenthesis")
             return None
@@ -246,9 +262,9 @@ class expressionValidator:
 
     
 # expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**-2.5))")
-# output = input("Expression: ")
-# expClass = expressionValidator(output)
-# # print(expClass.recursiveFunction())
+output = input("Expression: ")
+expClass = expressionValidator(output)
+print(expClass.runEntirePrograme())
 # expClass.runEntirePrograme()
 
 
