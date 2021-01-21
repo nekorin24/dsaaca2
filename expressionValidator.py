@@ -262,9 +262,9 @@ class expressionValidator:
 
     
 # expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**-2.5))")
-output = input("Expression: ")
-expClass = expressionValidator(output)
-print(expClass.runEntirePrograme())
+# output = input("Expression: ")
+# expClass = expressionValidator(output)
+# print(expClass.runEntirePrograme())
 # expClass.runEntirePrograme()
 
 
