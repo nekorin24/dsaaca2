@@ -111,6 +111,7 @@ class mainPrograme:
         tree = buildParseTree(exp[0])
         tree.printPreorder(0)
         print (f'The expression: {exp[1]} evaluates to: {evaluate(tree)}')
+        os.system('pause')
 
     
     def sortExpression(self,input_file,output_file):
