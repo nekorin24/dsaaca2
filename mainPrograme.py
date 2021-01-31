@@ -4,13 +4,31 @@ from stack import Stack
 from binaryTree import BinaryTree
 # choice = int(input("Please select your choice ('1','2','3'):\n1. Evaluate expressions\n2. Sort expression\n3. Exit\nEnter choice: "))
 # class.runfunction(choice-1)
-def mergeSort(l):
+
+def sortAscending():
+    if evaluate(lefttree) < evaluate(righttree):
+        mergeList[mergeIndex] = leftHalf[leftIndex]
+        leftIndex+=1
+    else:
+        mergeList[mergeIndex] = rightHalf[rightIndex]
+        rightIndex+=1
+
+def sortDescending():
+    if evaluate(lefttree) > evaluate(righttree):
+        mergeList[mergeIndex] = leftHalf[leftIndex]
+        leftIndex+=1
+    else:
+        mergeList[mergeIndex] = rightHalf[rightIndex]
+        rightIndex+=1
+
+def mergeSort(l, output_choice):
+    op_choice = int(output_choice)
     if len(l) > 1:
         mid = int (len(l)/2)
         leftHalf = l[:mid]
         rightHalf = l[mid:]
-        mergeSort(leftHalf)
-        mergeSort(rightHalf)
+        mergeSort(leftHalf,op_choice)
+        mergeSort(rightHalf,op_choice)
         leftIndex,rightIndex,mergeIndex = 0,0,0
         mergeList = l
         while leftIndex < len(leftHalf) and rightIndex < len(rightHalf):
@@ -34,12 +52,28 @@ def mergeSort(l):
                     mergeList[mergeIndex] = rightHalf[rightIndex]
                     rightIndex+=1
             else:
-                if evaluate(lefttree) < evaluate(righttree):
-                    mergeList[mergeIndex] = leftHalf[leftIndex]
-                    leftIndex+=1
+                #Ascending
+                if op_choice == 1:
+                    print("Sorting Ascending...")
+                    if evaluate(lefttree) < evaluate(righttree):
+                        mergeList[mergeIndex] = leftHalf[leftIndex]
+                        leftIndex+=1
+                    else:
+                        mergeList[mergeIndex] = rightHalf[rightIndex]
+                        rightIndex+=1
+                #Descending
+                elif op_choice == 2:
+                    print("Sorting Descending...")
+                    if evaluate(lefttree) > evaluate(righttree):
+                        mergeList[mergeIndex] = leftHalf[leftIndex]
+                        leftIndex+=1
+                    else:
+                        mergeList[mergeIndex] = rightHalf[rightIndex]
+                        rightIndex+=1
                 else:
-                    mergeList[mergeIndex] = rightHalf[rightIndex]
-                    rightIndex+=1
+                    return getOutput_Choice()
+                # if chosen_choice == 2:
+                #     sortDescending()
             mergeIndex+=1
         # Handle those items still left in the left Half
         while leftIndex < len(leftHalf):
@@ -114,7 +148,7 @@ class mainPrograme:
         os.system('pause')
 
     
-    def sortExpression(self,input_file,output_file):
+    def sortExpression(self,output_choice,input_file,output_file):
         array = []
         try:
             with open(str(input_file),'r') as input_file:
@@ -122,7 +156,7 @@ class mainPrograme:
                     array.append(line.replace("\n",""))
                 try:
                     # print(array)
-                    mergeSort(array)
+                    mergeSort(array,output_choice)
                     try:
                         recursive(array,len(array),str(output_file))
                     except:
@@ -139,7 +173,7 @@ class mainPrograme:
         os.system('pause')
 
     def runSortandEvaluate(self):
-        self.sortExpression(self.getInput_file(), self.getOutput_file())
+        self.sortExpression(self.getOutput_Choice(), self.getInput_file(), self.getOutput_file())
     def exit(self):
         print("Bye, thanks for using ST107 DSAA: Expression Evaluator & Sorter")
     
@@ -155,12 +189,28 @@ class mainPrograme:
             print("Input is not a valid")
             return self.getChoice()
             # return
+
+    def check_outputChoice(self,output_choice):
+        try:
+            validate_outputchoice = int(output_choice)
+            if 1 < validate_outputchoice < 3:
+                return validate_choice
+            else:
+                print("Input is not part of the above options")
+                return self.getOutput_Choice()
+        except ValueError:
+            print("Input is not a valid")
+            return self.getOutput_Choice()
+            # return
     
     def getChoice(self):
         chosen_choice = input("\nPlease select your choice ('1','2','3'):\n1. Evaluate expressions\n2. Sort expression\n3. Exit\nEnter choice: ")
         # print(self.checkChoice(chosen_choice))
         return self.checkChoice(chosen_choice)
         # return chosen_choice
+    def getOutput_Choice(self):
+        output_choice = input("\n(1) Ascending\n(2) Descending\nSelect choice:")
+        return output_choice
     def getInput_file(self):
         input_file = input("\nPlease enter input file:")
         return input_file
