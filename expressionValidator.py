@@ -15,6 +15,9 @@ class expressionValidator:
     "int": ["0","1","2","3","4","5","6","7","8","9",".","-","+","*","/",")"],
     ".":["0","1","2","3","4","5","6","7","8","9"]
     }
+    def isEmpty(self, exp):
+        return exp == ""
+
     def remove_spaces(self,exp):
         exp = exp.replace(" ","")
         return exp
@@ -63,7 +66,9 @@ class expressionValidator:
     def checkIntegerCondition(self,exp,index):
         return exp[index + 1] in self.condition["int"]
     
-    
+    # def checkSymbols(self, exp):
+    #     return exp in ["-","+","*","/"]
+
     def checkOperators(self,value):
         return value in ["-","+","*","/",")","("]
 
@@ -71,8 +76,10 @@ class expressionValidator:
         return self.checkInteger(value) or self.decimalStop(value) or self.checkOperators(value)
     
     def checkParenthesis(self,exp):
-        return (exp[0] == "(" and exp[-1] == ")")
-
+        try:
+            return (exp[0] == "(" and exp[-1] == ")")
+        except:
+            return False
     # def recursionExponential(self,array):
     #     for i in range(len(array)):
     #         if isinstance(array[i],list):
@@ -140,6 +147,8 @@ class expressionValidator:
             output = []
         else:
             output = ["("]
+        if self.isEmpty(self.exp):
+            return None
         while self.i < len(self.exp):
             index = self.exp[self.i]
             if index != " ":
@@ -255,6 +264,9 @@ class expressionValidator:
             else:
                 # return self.flatten(self.recursionAdd(self.recursionMul(self.recursionExponential(output))))
                 return self.flatten(self.recursionFunction(output,[["**"],["*","/"],["+","-"]]))
+        elif self.isEmpty(self.exp):
+            print("Missing expression! Please try again!")
+            return None
         else:
             print("Not enclosed with parenthesis")
             return None
