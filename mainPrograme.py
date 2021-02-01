@@ -5,22 +5,6 @@ from binaryTree import BinaryTree
 # choice = int(input("Please select your choice ('1','2','3'):\n1. Evaluate expressions\n2. Sort expression\n3. Exit\nEnter choice: "))
 # class.runfunction(choice-1)
 
-def sortAscending():
-    if evaluate(lefttree) < evaluate(righttree):
-        mergeList[mergeIndex] = leftHalf[leftIndex]
-        leftIndex+=1
-    else:
-        mergeList[mergeIndex] = rightHalf[rightIndex]
-        rightIndex+=1
-
-def sortDescending():
-    if evaluate(lefttree) > evaluate(righttree):
-        mergeList[mergeIndex] = leftHalf[leftIndex]
-        leftIndex+=1
-    else:
-        mergeList[mergeIndex] = rightHalf[rightIndex]
-        rightIndex+=1
-
 def mergeSort(l, output_choice):
     op_choice = int(output_choice)
     if len(l) > 1:
@@ -210,7 +194,7 @@ class mainPrograme:
         # return chosen_choice
     def getOutput_Choice(self):
         output_choice = input("\n(1) Ascending\n(2) Descending\nSelect choice:")
-        return output_choice
+        return self.check_outputChoice(output_choice)
     def getInput_file(self):
         input_file = input("\nPlease enter input file:")
         return input_file
@@ -227,7 +211,7 @@ class mainPrograme:
     def printIntroduction(self):
         title = "ST107 DSAA: Expression Evaluator & Sorter"
         grpMember = ["Teh Hock Jian", "Tan Bao Quan", "Ao Yang"]
-        admission = [1839045,1234567,1234567]
+        admission = [1839045,1935347,1935602]
         ditclass = "DIT/2B/11"
         length = 100
         nameText = ""
