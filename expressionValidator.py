@@ -131,6 +131,12 @@ class expressionValidator:
                     newarray = [["("] + array[(i-1):(i+2)] + [")"]]
                     newarray = array[:(i-1)] + newarray + array[(i+2):]
                     return self.recursionFunction(newarray,condition)
+            # Validating examples (3), ((3))
+            elif i == (len(array) -2):
+                if array[i+1] == ")" and array[i-1] == "(":
+                    newarray = [array[i]]
+                    return self.recursionFunction(newarray,condition)
+                # return array[i]
         return self.recursionFunction(array,condition[1:])
 
     def flatten(self,S):
@@ -193,6 +199,8 @@ class expressionValidator:
                                         if self.exp[self.i-1] in ["(","*","/"]:
                                             self.exp = self.exp[:(self.i)] + self.exp[(self.i+2):]
                                             self.i -= 1
+                                            print(self.exp)
+                                            print(self.exp[self.i+1])
                                             if not self.checkCondition(self.exp,self.i):
                                                 print("Invalid")
                                                 return None
@@ -202,7 +210,13 @@ class expressionValidator:
                                     # If it is a plus sign in front of negative sign
                                     elif self.exp[self.i+1] == "+":
                                         # Switch to - sign at next character
-                                        self.exp = self.exp[:(self.i+1)] + "-" + self.exp[(self.i+2):]
+                                        print("yes")
+                                        if (self.exp[self.i-1] in ["(","*","/"]):
+                                            self.exp = self.exp[:(self.i)] + self.exp[(self.i+2):]
+                                            print(self.exp)
+                                            self.i -=1
+                                        else:
+                                            self.exp = self.exp[:(self.i+1)] + "+" + self.exp[(self.i+2):]
                                     # If its an integer after negative
                                     # elif (self.checkInteger(self.exp[self.i+1]) or self.decimalStop(self.exp[self.i+1])) and (self.exp[self.i-1] in ["(","*","/"]):
                                     elif (self.exp[self.i-1] in ["(","*","/"]):
@@ -263,6 +277,7 @@ class expressionValidator:
                 return None
             else:
                 # return self.flatten(self.recursionAdd(self.recursionMul(self.recursionExponential(output))))
+                # return self.recursionFunction(output,[["**"],["*","/"],["+","-"]])
                 return self.flatten(self.recursionFunction(output,[["**"],["*","/"],["+","-"]]))
         elif self.isEmpty(self.exp):
             print("Missing expression! Please try again!")
@@ -273,10 +288,12 @@ class expressionValidator:
 
 
     
-# expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**-2.5))")
+expClass = expressionValidator("( -3 / 3 ** 5 + (5**2) -- (4**---+-2.5))")
+# expClass = expressionValidator("(-5 + 3 * (5 - (---+10.5)) / (2))")
+# expClass = expressionValidator("(---+-5)")
 # output = input("Expression: ")
 # expClass = expressionValidator(output)
-# print(expClass.runEntirePrograme())
+print(expClass.runEntirePrograme())
 # expClass.runEntirePrograme()
 
 
