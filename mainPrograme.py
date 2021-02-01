@@ -170,7 +170,7 @@ class mainPrograme:
                 print("Input is not part of the above options")
                 return self.getChoice()
         except ValueError:
-            print("Input is not a valid")
+            print("Input is invalid")
             return self.getChoice()
             # return
 
@@ -183,7 +183,7 @@ class mainPrograme:
                 print("Input is not part of the above options")
                 return self.getOutput_Choice()
         except ValueError:
-            print("Input is not a valid")
+            print("Input is not invalid")
             return self.getOutput_Choice()
             # return
     
