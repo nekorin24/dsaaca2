@@ -228,7 +228,7 @@ class expressionValidator:
                                         output.append(index)
                                 elif index == "*":
                                     if self.exp[self.i+1] == "*":
-                                        if (self.checkInteger(self.exp[self.i+2]) or self.decimalStop(self.exp[self.i+2]) or self.exp[self.i+2] == "-"):
+                                        if (self.checkInteger(self.exp[self.i+2]) or self.decimalStop(self.exp[self.i+2]) or self.exp[self.i+2] == "-" or self.exp[self.i+2] == "("):
                                             output.append("**")
                                             self.i +=1
                                         else:

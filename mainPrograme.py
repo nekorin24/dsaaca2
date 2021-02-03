@@ -183,7 +183,7 @@ class mainPrograme:
         try:
             validate_outputchoice = int(output_choice)
             if 1 < validate_outputchoice < 3:
-                return validate_choice
+                return validate_outputchoice
             else:
                 print("Input is not part of the above options")
                 return self.getOutput_Choice()
@@ -275,10 +275,7 @@ def buildParseTree(exp):
             raise ValueError
     return tree
 
-
 main_programme = mainPrograme()
-
-
 
 def evaluate(tree):
     leftTree = tree.getLeftTree()
@@ -292,11 +289,6 @@ def evaluate(tree):
         elif op == '*':
             return evaluate(leftTree) * evaluate(rightTree)
         elif op == '/':
-            # if evaluate(rightTree) == 0:
-            #     print("Mathematical Error: Not divisible by 0!")
-            #     x = 1
-            #     return x,tree.getKey()
-            # else:
             return evaluate(leftTree) / evaluate(rightTree)
         elif op == '**':
             return evaluate(leftTree) ** evaluate(rightTree)
