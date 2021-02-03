@@ -128,7 +128,12 @@ class mainPrograme:
         exp = self.validateExpression()
         tree = buildParseTree(exp[0])
         tree.printPreorder(0)
-        print (f'The expression: {exp[1]} evaluates to: {evaluate(tree)}')
+        # if isinstance(evaluate(tree),float) == False:
+        if ZeroDivisionError:
+            print (f'The expression: {exp[1]} cannot be evaluated! Zero Division Error.\n\nNumber cannot be divided by zero, result is infinite.')
+            return tree.getKey()
+        else:
+            print (f'The expression: {exp[1]} evaluates to: {evaluate(tree)}')
         os.system('pause')
 
     
@@ -269,6 +274,12 @@ def buildParseTree(exp):
         else:
             raise ValueError
     return tree
+
+
+main_programme = mainPrograme()
+
+
+
 def evaluate(tree):
     leftTree = tree.getLeftTree()
     rightTree = tree.getRightTree()
@@ -281,6 +292,11 @@ def evaluate(tree):
         elif op == '*':
             return evaluate(leftTree) * evaluate(rightTree)
         elif op == '/':
+            # if evaluate(rightTree) == 0:
+            #     print("Mathematical Error: Not divisible by 0!")
+            #     x = 1
+            #     return x,tree.getKey()
+            # else:
             return evaluate(leftTree) / evaluate(rightTree)
         elif op == '**':
             return evaluate(leftTree) ** evaluate(rightTree)

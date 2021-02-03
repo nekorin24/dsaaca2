@@ -12,6 +12,7 @@ class Stack:
 
     def push(self, item):
         self.__list.append(item)
+        
 
     def pop(self): # popTail
         if self.isEmpty():
