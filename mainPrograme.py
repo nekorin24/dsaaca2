@@ -129,11 +129,11 @@ class mainPrograme:
         tree = buildParseTree(exp[0])
         tree.printPreorder(0)
         # if isinstance(evaluate(tree),float) == False:
-        if ZeroDivisionError:
-            print (f'The expression: {exp[1]} cannot be evaluated! Zero Division Error.\n\nNumber cannot be divided by zero, result is infinite.')
-            return tree.getKey()
-        else:
+        try:
             print (f'The expression: {exp[1]} evaluates to: {evaluate(tree)}')
+        except ZeroDivisionError:
+            print (f'The expression: {exp[1]} cannot be evaluated! Zero Division Error.\n\nNumber cannot be divided by/with zero, result is infinite.')
+            return tree.getKey()
         os.system('pause')
 
     
