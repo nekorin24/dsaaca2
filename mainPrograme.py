@@ -1,5 +1,5 @@
 import os
-from expressionValidator import expressionValidator
+from refinedexpressionValidator import expressionValidator
 from stack import Stack
 from binaryTree import BinaryTree
 # choice = int(input("Please select your choice ('1','2','3'):\n1. Evaluate expressions\n2. Sort expression\n3. Exit\nEnter choice: "))
@@ -182,7 +182,7 @@ class mainPrograme:
     def check_outputChoice(self,output_choice):
         try:
             validate_outputchoice = int(output_choice)
-            if 1 < validate_outputchoice < 3:
+            if 0 < validate_outputchoice < 3:
                 return validate_outputchoice
             else:
                 print("Input is not part of the above options")
