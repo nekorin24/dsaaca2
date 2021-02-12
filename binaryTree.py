@@ -3,21 +3,21 @@ class BinaryTree:
         self.key = key
         self.leftTree = leftTree
         self.rightTree = rightTree
-    def setKey(self, key):
+    def set_key(self, key):
         self.key = key
-    def getKey(self):
+    def get_key(self):
         return self.key
-    def getLeftTree(self):
+    def get_left_tree(self):
         return self.leftTree
-    def getRightTree(self):
+    def get_right_tree(self):
         return self.rightTree
-    def insertLeft(self, key):
+    def insert_left(self, key):
         if self.leftTree == None:
             self.leftTree = BinaryTree(key)
         else:
             t =BinaryTree(key)
             self.leftTree , t.leftTree = t, self.leftTree
-    def insertRight(self, key):
+    def insert_right(self, key):
         if self.rightTree == None:
             self.rightTree = BinaryTree(key)
         else:
@@ -25,9 +25,9 @@ class BinaryTree:
             self.rightTree , t.leftTree = t, self.rightTree
             t.rightTree = BinaryTree('?')
             
-    def printPreorder(self, level):
+    def print_preorder(self, level):
         print( str(level*'-') + str(self.key))
         if self.leftTree != None:
-            self.leftTree.printPreorder(level+1)
+            self.leftTree.print_preorder(level+1)
         if self.rightTree != None:
-            self.rightTree.printPreorder(level+1) 
+            self.rightTree.print_preorder(level+1) 

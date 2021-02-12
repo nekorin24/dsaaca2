@@ -46,21 +46,21 @@ class BinaryTree:
         self.key = key
         self.leftTree = leftTree
         self.rightTree = rightTree
-    def setKey(self, key):
+    def set_key(self, key):
         self.key = key
-    def getKey(self):
+    def get_key(self):
         return self.key
-    def getLeftTree(self):
+    def get_left_tree(self):
         return self.leftTree
-    def getRightTree(self):
+    def get_right_tree(self):
         return self.rightTree
-    def insertLeft(self, key):
+    def insert_left(self, key):
         if self.leftTree == None:
             self.leftTree = BinaryTree(key)
         else:
             t =BinaryTree(key)
             self.leftTree , t.leftTree = t, self.leftTree
-    def insertRight(self, key):
+    def insert_right(self, key):
         if self.rightTree == None:
             self.rightTree = BinaryTree(key)
         else:
@@ -68,17 +68,17 @@ class BinaryTree:
             self.rightTree , t.leftTree = t, self.rightTree
             t.rightTree = BinaryTree('?')
             
-    def printPreorder(self, level):
+    def print_preorder(self, level):
         print( str(level*'-') + str(self.key))
         if self.leftTree != None:
-            self.leftTree.printPreorder(level+1)
+            self.leftTree.print_preorder(level+1)
         if self.rightTree != None:
-            self.rightTree.printPreorder(level+1) 
+            self.rightTree.print_preorder(level+1) 
 
 
 
 import re
-def buildParseTree(exp):
+def build_parse_tree(exp):
     tokens = exp.split()
 #     exp = exp.replace(" ","")
 #     number_or_symbol = re.compile('(-?\d+\.\d+|\w+|[()\-+*/^])')
@@ -93,27 +93,27 @@ def buildParseTree(exp):
         # RULE 1: If token is '(' add a new node as left child
         # and descend into that node
         if t == '(':
-            currentTree.insertLeft('?')
+            currentTree.insert_left('?')
             stack.push(currentTree)
-            currentTree = currentTree.getLeftTree() 
+            currentTree = currentTree.get_left_tree() 
         # RULE 2: If token is operator set key of current node
         # to that operator and add a new node as right child
         # and descend into that node
         elif t in ['+', '-', '*', '/', '**']:
-            if currentTree.getKey() == '?':
-                currentTree.setKey(t)
-                currentTree.insertRight("?")
+            if currentTree.get_key() == '?':
+                currentTree.set_key(t)
+                currentTree.insert_right("?")
                 stack.push(currentTree)
-                currentTree = currentTree.getRightTree()
+                currentTree = currentTree.get_right_tree()
             else:
-                currentTree.insertRight(t)
+                currentTree.insert_right(t)
                 stack.push(currentTree)
-                currentTree = currentTree.getRightTree()
-                currentTree = currentTree.getRightTree()
+                currentTree = currentTree.get_right_tree()
+                currentTree = currentTree.get_right_tree()
         # RULE 3: If token is number, set key of the current node
         # to that number and return to parent
         elif t not in ['+', '-', '*', '/', '**', ')'] :
-            currentTree.setKey(float(t))
+            currentTree.set_key(float(t))
             parent = stack.pop()
             currentTree = parent
         # RULE 4: If token is ')' go to parent of current node
@@ -123,9 +123,9 @@ def buildParseTree(exp):
             raise ValueError
     return tree
 def evaluate(tree):
-    leftTree = tree.getLeftTree()
-    rightTree = tree.getRightTree()
-    op = tree.getKey()
+    leftTree = tree.get_left_tree()
+    rightTree = tree.get_right_tree()
+    op = tree.get_key()
     if leftTree != None and rightTree != None:
         if op == '+':
             return evaluate(leftTree) + evaluate(rightTree)
@@ -138,4 +138,4 @@ def evaluate(tree):
         elif op == '**':
             return evaluate(leftTree) ** evaluate(rightTree)
     else:
-        return tree.getKey()
+        return tree.get_key()

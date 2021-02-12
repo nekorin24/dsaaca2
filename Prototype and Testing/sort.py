@@ -2,13 +2,13 @@
 # output_file = input("Please enter output file: ")
 
 
-def mergeSort(l):
+def merge_sort(l):
     if len(l) > 1:
         mid = int (len(l)/2)
         leftHalf = l[:mid]
         rightHalf = l[mid:]
-        mergeSort(leftHalf)
-        mergeSort(rightHalf)
+        merge_sort(leftHalf)
+        merge_sort(rightHalf)
         leftIndex,rightIndex,mergeIndex = 0,0,0
         mergeList = l
         while leftIndex < len(leftHalf) and rightIndex < len(rightHalf):
@@ -46,7 +46,7 @@ with open("input.txt",'r') as input_file:
     for line in input_file:
         array.append(line.replace("\n",""))
 # print(array)
-mergeSort(array)
+merge_sort(array)
 # print(array)
 recursive(array,len(array))
 

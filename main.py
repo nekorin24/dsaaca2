@@ -1,6 +1,6 @@
-from mainPrograme import mainPrograme
+from mainPrograme import MainProgram
 
-main = mainPrograme()
-main.printIntroduction()
-chosen_choice = main.getChoice()
-main.runChoice(chosen_choice)
+main = MainProgram()
+main.print_introduction()
+chosen_choice = main.get_choice()
+main.run_choice(chosen_choice)
