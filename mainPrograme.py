@@ -151,16 +151,18 @@ class MainProgram:
                     try:
                         recursive(array,len(array),str(output_file))
                     except:
-                        print("Invalid output file")
-                        print("Please try again.\n")
-                        self.run_sort_and_evaluate()
+                        print("Invalid expression in input file!")
+                        # print("Please try again.\n")
+                        # self.run_sort_and_evaluate()
+                        return
                 except:
                     print("Invalid expression in input file!")
                     return
         except:
             print("Invalid input file!")
-            print("Please try again.\n")
-            self.run_sort_and_evaluate()
+            return
+            # print("Please try again.\n")
+            # self.run_sort_and_evaluate()
         os.system('pause')
 
     def run_sort_and_evaluate(self):
