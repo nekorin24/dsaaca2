@@ -152,10 +152,13 @@ class MainProgram:
         else:
             return [output,expression]
     # Evaluate expression
-    def evaluate_expression(self):
+    def evaluate_expression(self,output_choice):
         exp = self.validate_expression()
         tree = build_parse_tree(exp[0])
-        tree.print_preorder(0)
+        if output_choice == 1:
+            tree.print_preorder(0)
+        else:
+            tree.print_postorder(0)
         # if isinstance(evaluate(tree),float) == False:
         try:
             print (f'The expression: {exp[1]} evaluates to: {evaluate(tree)}')
@@ -198,6 +201,13 @@ class MainProgram:
     # Run sort and evaluation function
     def run_sort_and_evaluate(self):
         self.sort_expression(self.get_output_choice(), self.get_input_file(), self.get_output_file())
+
+    def get_printing_choice(self):
+        output_choice = input("\n(1) Print Preorder\n(2) Print Postorder\nSelect choice: ")
+        return self.check_printing_choice(output_choice)
+
+    def run_evaluation(self):
+        self.evaluate_expression(self.get_printing_choice())
     # Print exit message
     def exit(self):
         print("Bye, thanks for using ST107 DSAA: Expression Evaluator & Sorter")
@@ -215,6 +225,18 @@ class MainProgram:
             return self.get_choice()
             # return
     # Check output choice of the ascending and descending option
+    def check_printing_choice(self,output_choice):
+        try:
+            validate_outputchoice = int(output_choice)
+            if 0 < validate_outputchoice < 3:
+                return validate_outputchoice
+            else:
+                print("Input is not part of the above options")
+                return self.get_printing_choice()
+        except ValueError:
+            print("Input is not invalid")
+            return self.get_printing_choice()
+
     def check_output_choice(self,output_choice):
         try:
             validate_outputchoice = int(output_choice)
@@ -247,7 +269,7 @@ class MainProgram:
         return output_file
     # Run the function of the appropriate choice given
     def run_choice(self,choice):
-        programeArray = [self.evaluate_expression, self.run_sort_and_evaluate, self.exit]
+        programeArray = [self.run_evaluation, self.run_sort_and_evaluate, self.exit]
         programeArray[choice-1]()
         # If choice equals to exit option, end program
         if choice == 3:
