@@ -7,6 +7,7 @@ class ExpressionValidator:
         self.open_brackets = 0
         self.close_brackets = 0
         self.i = 0
+        # Condition is being added to check if value after current character is valid
         self.condition = {
     "(": ["0","1","2","3","4","5","6","7","8","9",".", "-","(","+"],
     ")": ["+","-","/","*",")"],
@@ -17,42 +18,50 @@ class ExpressionValidator:
     "int": ["0","1","2","3","4","5","6","7","8","9",".","-","+","*","/",")"],
     ".":["0","1","2","3","4","5","6","7","8","9"]
     }
+    # Check if expression is empty
     def isEmpty(self, exp):
         return exp == ""
-
+    # Remove spaces of the expression
     def remove_spaces(self,exp):
         exp = exp.replace(" ","")
         return exp
-    
+    # Check if current value is an integer
     def check_integer(self,value):
         try:
             int(value)
             return True
         except:
             return False
+    # Check if there is a decimal stop of current value
     def decimal_stop(self,value):
         return value == "."
-    
+    # Get the current integer or decimal value if current value is an integer or decimal point
     def get_int_or_decimal_value(self, exp, i,output):
         output = output
+        # No comma has been detected
         no_comma = True
         x = i
         # if exp[x] == ".":
+        # If current value is a comma
         if self.decimal_stop(exp[x]):
+            # Comma has been detected
             no_comma = False
         while x < len(exp):
-            # if exp[x+1] in ["0","1","2","3","4","5","6","7","8","9"]:
+            # Check if current value is an integer
             if self.check_integer(exp[x+1]):
                 output += str(exp[x+1])
-            # elif exp[x+1] == ".":
+            # If current value is a decimal point
             elif self.decimal_stop(exp[x+1]):
+                # If comma has not been detected yet
                 if no_comma == True:
+                    # Add decimal point
                     output += "."
+                    # Comma detected 
                     no_comma = False
                 else:
-                    # print("Invalid Input after full stop")
-                    # break
+                    # Raise error for having more than one decimal point
                     raise ErrorWithMsg("Invalid Input after full stop")
+            # If it is not an integer or decimal point
             else:
                 if exp[x+1] == (i + 1):
                     # print("Invalid Input")
@@ -61,40 +70,46 @@ class ExpressionValidator:
                 break
             x += 1
         # array.append(output)
+        # Set current index of array to end of number index
         i = x
         self.i = i
         return output
+    # Check condition of current value and next value
     def check_condition(self,exp, index):
         return exp[index + 1] in self.condition[exp[index]]
-
+    # Check condition for integers
     def check_int_condition(self,exp,index):
         return exp[index + 1] in self.condition["int"]
     
     # def checkSymbols(self, exp):
     #     return exp in ["-","+","*","/"]
-
+    # Check for operators in current index
     def check_operators(self,value):
         return value in ["-","+","*","/",")","("]
-
+    # Check if current value are acceptable characters
     def check_all_valid(self,value):
         return self.check_integer(value) or self.decimal_stop(value) or self.check_operators(value)
-    
+    # Check for paranthesis in between expression
     def check_parenthesis(self,exp):
         try:
             return (exp[0] == "(" and exp[-1] == ")")
         except:
             return False
-
+    # Recursion function to add brackets depending on the operator
     def recursion_function(self,array,condition):
         if len(condition) == 0:
             return array
         for i in range(len(array)):
+            # If current index is an array
             if isinstance(array[i],list):
                 array[i] = self.recursion_function(array[i],condition)
+            # If current index is an operator of the first condition
             if array[i] in condition[0]:
+                # If there is a bracket between 2 elements such as ( 2 * 5 )
                 if array[i+2] == ")" and array[i-2] == "(":
                     pass
                 else:
+                    # Add a bracket in between them
                     newarray = [["("] + array[(i-1):(i+2)] + [")"]]
                     newarray = array[:(i-1)] + newarray + array[(i+2):]
                     return self.recursion_function(newarray,condition)
@@ -105,10 +120,11 @@ class ExpressionValidator:
                     return self.recursion_function(newarray,condition)
                 # return array[i]
         return self.recursion_function(array,condition[1:])
-
+    # Flatten all the arrays after the recursion array to get tokenized expression
     def flatten(self,S):
         if S == []:
             return S
+        # If it is an array
         if isinstance(S[0], list):
             return self.flatten(S[0]) + self.flatten(S[1:])
         return S[:1] + self.flatten(S[1:])
@@ -164,7 +180,6 @@ class ExpressionValidator:
                                     else:
                                         # append to current array
                                         output.append(callback)
-                                    # output.append(self.recursive_function())
                                 # If it is closed bracket
                                 elif index == ")":
                                     # self.i += 1
@@ -174,8 +189,6 @@ class ExpressionValidator:
                                 # if current index is plus sign
                                 elif index == "+":
                                     # if current and next index is "+-" or "++" pass
-                                    # if self.exp[self.i+1] == "-" or self.exp[self.i+1] == "+":
-                                    #     pass
                                     if (self.exp[self.i-1] in ["(","*","/"]):
                                         self.exp = self.exp[:(self.i)] + self.exp[(self.i+1):]
                                         self.i -= 1
@@ -226,15 +239,9 @@ class ExpressionValidator:
                                             self.i -= 1
                                         try:
                                             int(self.exp[self.i])
-                                            # if not self.check_int_condition(self.exp,self.i):
-                                            #         # print("Invalid")
-                                            #         # return None
-                                            #         raise ErrorWithMsg("Invalid")
                                         except:
                                             # Check condition only for full truncation
                                             if not self.check_condition(self.exp,self.i):
-                                                    # print("Invalid")
-                                                    # return None
                                                 raise ErrorWithMsg("Invalid")
                                     # If its an integer after negative
                                     # elif (self.check_integer(self.exp[self.i+1]) or self.decimal_stop(self.exp[self.i+1])) and (self.exp[self.i-1] in ["(","*","/"]):
@@ -277,6 +284,7 @@ class ExpressionValidator:
                                 raise ErrorWithMsg("Invalid Input after character")
                         # print(index)
                     else:
+                        # Increment close brackets count
                         if index == ")":
                             self.close_brackets += 1
                             # output.append(index)
@@ -292,6 +300,7 @@ class ExpressionValidator:
                 else:
                     raise ErrorWithMsg("Invalid Character used")
             self.i += 1
+        # If number of open brackets does not match with close brackets
         if self.open_brackets != self.close_brackets:
             raise ErrorWithMsg("Number of brackets does not match")
         return output
