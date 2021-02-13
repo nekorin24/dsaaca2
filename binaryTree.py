@@ -1,3 +1,4 @@
+# aoyang
 # Binary Tree class
 class BinaryTree:
     def __init__(self,key, leftTree = None, rightTree = None):
@@ -38,6 +39,7 @@ class BinaryTree:
             self.leftTree.print_preorder(level+1)
         if self.rightTree != None:
             self.rightTree.print_preorder(level+1) 
+
     def print_postorder(self, level):
         #left >right >root
         if self.leftTree != None:

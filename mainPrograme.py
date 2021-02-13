@@ -3,6 +3,7 @@ from refinedexpressionValidator import ExpressionValidator
 from stack import Stack
 from binaryTree import BinaryTree
 
+# baoquan
 # merge_sort function
 def merge_sort(l, output_choice):
     op_choice = int(output_choice)
@@ -92,7 +93,7 @@ def merge_sort(l, output_choice):
             mergeIndex+=1
         # print('merge', l)
 
-
+# hockjian
 # recursive function to print the sorting of expression
 def recursive(array,length,output_file_edit):
     # open output file to append
@@ -135,6 +136,8 @@ def recursive(array,length,output_file_edit):
 
         if len(array) == length:
             print("\n>>>Evaluation and sorting completed!\n")
+
+# aoyang           
 # MainProgram Class
 class MainProgram:
     def __init__(self,choice=None):
@@ -298,6 +301,8 @@ class MainProgram:
         output += "\n" + ("*" * length)
         
         print(output)
+
+# baoquan
 # build_parse_tree function
 def build_parse_tree(exp):
     tokens = exp
@@ -335,6 +340,8 @@ def build_parse_tree(exp):
     return tree
 
 main_programme = MainProgram()
+
+# baoquan
 # Evaluate the tree to get value of the expression
 def evaluate(tree):
     leftTree = tree.get_left_tree()
