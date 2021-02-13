@@ -29,12 +29,22 @@ def merge_sort(l, output_choice):
             lefttree = build_parse_tree(outputLeft)
             righttree = build_parse_tree(outputRight)
             if evaluate(lefttree) == evaluate(righttree):
-                if len(leftHalf[leftIndex]) < len(rightHalf[rightIndex]):
-                    mergeList[mergeIndex] = leftHalf[leftIndex]
-                    leftIndex+=1
+                if op_choice == 1:
+                    if len(leftHalf[leftIndex]) < len(rightHalf[rightIndex]):
+                        mergeList[mergeIndex] = leftHalf[leftIndex]
+                        leftIndex+=1
+                    else:
+                        mergeList[mergeIndex] = rightHalf[rightIndex]
+                        rightIndex+=1
+                elif op_choice == 2:
+                    if len(leftHalf[leftIndex]) > len(rightHalf[rightIndex]):
+                        mergeList[mergeIndex] = leftHalf[leftIndex]
+                        leftIndex+=1
+                    else:
+                        mergeList[mergeIndex] = rightHalf[rightIndex]
+                        rightIndex+=1
                 else:
-                    mergeList[mergeIndex] = rightHalf[rightIndex]
-                    rightIndex+=1
+                    return get_output_choice()
             else:
                 #Ascending
                 if op_choice == 1:
@@ -117,7 +127,7 @@ class MainProgram:
         self.choice = choice
 
     def validate_expression(self):
-        expression = input("Please enter the expression you want to evaluate:\n")
+        expression = input("\nPlease enter the expression you want to evaluate:\n")
         expClass = ExpressionValidator(expression)
         output = expClass.run_entire_program()
         if output == None:
@@ -147,8 +157,10 @@ class MainProgram:
                     array.append(line.replace("\n",""))
                 try:
                     # print(array)
+                    array = [x.replace(" ","") for x in array]
                     merge_sort(array,output_choice)
                     try:
+                        open(str(output_file),"w").close()
                         recursive(array,len(array),str(output_file))
                     except:
                         print("Invalid expression in input file!")

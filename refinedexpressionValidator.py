@@ -254,7 +254,7 @@ class ExpressionValidator:
                                     # Ex (6**2)
                                     if self.exp[self.i+1] == "*":
                                         # Check if its valid character after exponential)
-                                        if (self.check_integer(self.exp[self.i+2]) or self.decimal_stop(self.exp[self.i+2]) or self.exp[self.i+2] == "-" or self.exp[self.i+2] == "("):
+                                        if (self.check_integer(self.exp[self.i+2]) or self.decimal_stop(self.exp[self.i+2]) or self.exp[self.i+2] in ["-","+"] or self.exp[self.i+2] == "("):
                                             output.append("**")
                                             self.i +=1
                                         else:
